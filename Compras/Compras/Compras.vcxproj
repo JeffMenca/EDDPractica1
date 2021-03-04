@@ -66,6 +66,9 @@
     <ClCompile Include="Carreta.cpp" />
     <ClCompile Include="Cliente.cpp" />
     <ClCompile Include="ColaCarreta.cpp" />
+    <ClCompile Include="ColaPagos.cpp" />
+    <ClCompile Include="ListaCajas.cpp" />
+    <ClCompile Include="listaCompras.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PilaCarreta.cpp" />
   </ItemGroup>
@@ -74,6 +77,9 @@
     <ClInclude Include="Carreta.h" />
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="ColaCarreta.h" />
+    <ClInclude Include="ColaPagos.h" />
+    <ClInclude Include="ListaCajas.h" />
+    <ClInclude Include="listaCompras.h" />
     <ClInclude Include="PilaCarreta.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

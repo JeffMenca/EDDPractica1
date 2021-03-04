@@ -1,13 +1,17 @@
 #include "Caja.h"
 
 //Constructor
-Caja::Caja(int numeroCaja, double tiempoServicio, bool estadoLibre, int codigoCliente, int codigoCarreta)
+Caja::Caja(int numeroCaja, int tiempoServicio,int tiempoRestante, bool estadoLibre, int codigoCliente, int codigoCarreta)
 {
     this->numeroCaja = numeroCaja;
     this->tiempoServicio = tiempoServicio;
+	this->tiempoRestante=tiempoRestante;
     this->estadoLibre = estadoLibre;
     this->codigoCliente = codigoCliente;
     this->codigoCarreta = codigoCarreta;
+}
+Caja::Caja()
+{
 }
 
 //Metodos get
@@ -15,9 +19,13 @@ int Caja::getNumeroCaja()
 {
 	return numeroCaja;
 }
-double Caja::getTiempoServicio()
+int Caja::getTiempoServicio()
 {
 	return tiempoServicio;
+}
+int Caja::getTiempoRestante()
+{
+	return tiempoRestante;
 }
 bool Caja::getEstadoLibre()
 {
@@ -37,9 +45,13 @@ void Caja::setNumeroCaja(int numeroCaja)
 {
 	this->numeroCaja = numeroCaja;
 }
-void Caja::setTiempoServicio(double tiempoServicio)
+void Caja::setTiempoServicio(int tiempoServicio)
 {
 	this->tiempoServicio = tiempoServicio;
+}
+void Caja::setTiempoRestante(int tiempoRestante)
+{
+	this->tiempoRestante = tiempoRestante;
 }
 void Caja::setEstadoLibre(bool estadoLibre)
 {
