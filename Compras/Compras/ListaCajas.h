@@ -10,6 +10,7 @@ public:
     ListaCajas(Caja);
 	void setCajaSiguiente(ListaCajas *cajaSiguiente);
 	void setCajaAnterior(ListaCajas *cajaAnterior);
+	void setCaja(Caja caja);
 	Caja getCaja();
 	ListaCajas* getCajaSiguiente();
 	ListaCajas* getCajaAnterior();

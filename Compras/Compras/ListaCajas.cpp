@@ -11,6 +11,10 @@ void ListaCajas::setCajaSiguiente(ListaCajas *cajaSiguiente)
 {
 	this->cajaSiguiente=cajaSiguiente;
 }
+void ListaCajas::setCaja(Caja caja)
+{
+	this->cajaIngresada=caja;
+}
 void ListaCajas::setCajaAnterior(ListaCajas *cajaAnterior)
 {
 	this->cajaAnterior=cajaAnterior;

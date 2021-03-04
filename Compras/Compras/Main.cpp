@@ -14,20 +14,23 @@
 using namespace std;
 
 //Prototipos
-void agregarCarreta(Carreta); //Prototipo de pila de carretas
+void agregarCarreta(Carreta); //Prototipo de pila de carretas 1
+void agregarCarreta2(Carreta); //Prototipo de pila de carretas 2
 Carreta sacarCarreta(); //Prototipo de sacar carreta
 void mostrarCarreta(); //Prototipo de ver pila
 void agregarColaCarreta(Cliente cliente); //Prototipo de agregar a cola carreta
 Cliente sacarColaCarreta(); //Protitipo para sacar de cola carreta
 void mostrarColaCarreta(); //Protitipo para mostrar de cola carreta
 void agregarColaPagos(Cliente cliente,Carreta carreta); //Prototipo de agregar a cola pagos
-Cliente sacarColaPagos(); //Protitipo para sacar de cola pagos
+ColaPagos sacarColaPagos(); //Protitipo para sacar de cola pagos
 void mostrarColaPagos(); //Protitipo para mostrar de cola pagos
 Cliente sacarListaCompras(int numeroRandom); //Prototipo para sacar de lista de compras
 void agregarListaCompras (Cliente cliente,Carreta carreta); //Protitipo para agregar a lista de compras
 void mostrarListaCompras(); //Prototipo para mopstrar la lista de compras
 void agregarListaCajas (Caja caja); //Protitipo para agregar a lista de cajas
 void mostrarListaCajas(); //Prototipo para mopstrar la lista de cajas
+void pasarACaja ();//Prototipo para pasar a caja
+void salirDeCaja ();//Prototipo para sacar de caja
 
 PilaCarreta *pilaCarretas=NULL,*pilaCarretas2=NULL;
 ColaCarreta *colaCarretaFrente=NULL,*colaCarretaFin=NULL;
@@ -39,12 +42,13 @@ ListaCajas *listaCajasInicio=NULL,*listaCajasFinal=NULL;
 int main()
 {
 	//Pilas y colas
-	int cantidadCajas,cantidadCarretas,cantidadClientes,clientesTotales=1,tiempoServicio;
+	int cantidadCajas,cantidadCarretas,cantidadClientes,clientesTotales=1,tiempoServicio,paso=1,opcion=1;
 	srand((unsigned)time(NULL));
 	cout<<"---SIMULACION DE COMPRAS---"<<endl;
 	cout<<""<<endl;
 	cout<<"--Ingrese los datos para la simulacion--"<<endl;
 	cout<<""<<endl;
+
 	//Numero de cajas del sistema
 	cout<<"Ingrese el numero de cajas que tendra el supermercado"<<endl;
 	cin>>cantidadCajas;
@@ -52,43 +56,63 @@ int main()
 	cin>>tiempoServicio;
 	for (int i = 1; i <= cantidadCajas; i++)
 	{
-		Caja nuevaCaja(i,tiempoServicio,tiempoServicio,true,NULL,NULL);
+		Caja nuevaCaja(i,tiempoServicio,tiempoServicio+1,true,NULL,NULL);
 		agregarListaCajas(nuevaCaja);
 	}
-	mostrarListaCajas();
+	cout<<""<<endl;
+	system("pause");
+	system("cls");
 	//Numero de carretas del sistema
 	cout<<""<<endl;
-	cout<<"Ingrese el numero de carretas que tendra el supermercado"<<endl;
+	cout<<"Ingrese el numero de carretas que tendra el supermercado por pila"<<endl;
 	cin>>cantidadCarretas;
-	for (int i = 1; i <= cantidadCarretas; i++)
+	int pila=1;
+	for (int i = 1; i <= cantidadCarretas*2; i++)
 	{
 		Carreta nuevaCarreta(i);
-		int numeroRandom=rand()%2;
-		if (numeroRandom==0)
+		if (pila==1){
 			agregarCarreta(nuevaCarreta);
-		else
-			agregarCarreta(nuevaCarreta);
+			pila=0;
+		}
+		else{
+			agregarCarreta2(nuevaCarreta);
+			pila=1;
+		}
 	}
-	//Clientes nuevos que ingresaran
 	cout<<""<<endl;
-	cout<<"Cuantos clientes nuevos ingresaran"<<endl;
-	cin>>cantidadClientes;
-	for (int i = clientesTotales; i <=cantidadClientes; i++)
-	{
-		Cliente nuevoCliente(i);
-		agregarColaCarreta(nuevoCliente);
+	system("pause");
+	while(opcion!=0){
+		//Clientes nuevos que ingresaran
+		system("cls");
+		cout<<""<<endl;
+		cout<<"***Paso "<<paso<<"***"<<endl;
+		cout<<""<<endl;
+		cout<<"Cuantos clientes nuevos ingresaran"<<endl;
+		cin>>cantidadClientes;
+		for (int i = clientesTotales; i <clientesTotales+cantidadClientes; i++)
+		{
+			Cliente nuevoCliente(i);
+			agregarColaCarreta(nuevoCliente);
+		}
+		clientesTotales+=cantidadClientes;
+
+
+		//Cliente sale de la fila y obtiene carreta
+		Carreta carreta=sacarCarreta();
+		//Clientes comprando y pagando
+		int numeroRandom=rand()%101; //Generar numero random
+		sacarListaCompras(numeroRandom);
+		pasarACaja();
+		salirDeCaja();
+
+		//Siguiente paso
+		cout<<""<<endl;
+		paso++;
+		cout<<"Ingrese 1 para el siguiente paso o 0 para terminar el proceso"<<endl;
+		cin>>opcion;
 	}
-	clientesTotales+=cantidadClientes;
-
-
-
-	//Cliente sale de la fila y obtiene carreta
-	Carreta carreta=sacarCarreta();
-	//Clientes comprando y pagando
-	int numeroRandom=rand()%101; //Generar numero random
-	sacarListaCompras(numeroRandom);
-
-
+	cout<<""<<endl;
+	cout<<"---Simulacion terminada---"<<endl;
 	_getch();
 }
 
@@ -99,7 +123,15 @@ void agregarCarreta(Carreta carreta)
 	nueva_carreta->setCarretaSiguiente(pilaCarretas);
 	pilaCarretas=nueva_carreta;
 	cout<<""<<endl;
-	cout<<"-La carreta con codigo "<<carreta.getNumeroCarreta()<<" fue agregada a la pila de carretas"<<endl;
+	cout<<"-La carreta con codigo "<<carreta.getNumeroCarreta()<<" fue agregada a la pila de carretas 1"<<endl;
+}
+void agregarCarreta2(Carreta carreta)
+{
+	PilaCarreta *nueva_carreta=new PilaCarreta(carreta);
+	nueva_carreta->setCarretaSiguiente(pilaCarretas2);
+	pilaCarretas2=nueva_carreta;
+	cout<<""<<endl;
+	cout<<"-La carreta con codigo "<<carreta.getNumeroCarreta()<<" fue agregada a la pila de carretas 2"<<endl;
 }
 
 Carreta sacarCarreta()
@@ -335,12 +367,14 @@ void agregarColaPagos(Cliente cliente,Carreta carreta)
 	cout<<"-El cliente con codigo "<<cliente.getCodigoCliente()<<" termino de comprar y se unio a la cola de pagos"<<endl;
 }
 
-Cliente sacarColaPagos()
+ColaPagos sacarColaPagos()
 {
 	Cliente cliente(0);
+	Carreta carreta(0);
 	if (colaPagosFrente!=NULL)
 	{
 		cliente=colaPagosFrente->getClientePagando();
+		carreta=colaPagosFrente->getCarretaCliente();
 		ColaPagos *aux=colaPagosFrente;
 		if (colaPagosFrente==colaPagosFin)
 		{
@@ -349,15 +383,15 @@ Cliente sacarColaPagos()
 		}
 		else
 			colaPagosFrente=colaPagosFrente->getClienteSiguiente();
+		ColaPagos datos(cliente,carreta);
 		delete aux;
-		//cout<<"-El cliente con codigo "<<cliente.getCodigoCliente()<<" salio de la cola de carretas"<<endl;
-		return cliente;
+		return datos;
 	}
 	else{
-		cout<<""<<endl;
-		cout<<"-La fila de pagos esta vacia"<<endl;
 		cliente.setCodigoCliente(NULL);
-		return cliente;
+		carreta.setNumeroCarreta(NULL);
+		ColaPagos datos(cliente,carreta);
+		return datos;
 	}
 }
 
@@ -419,7 +453,92 @@ void mostrarListaCajas()
 	}
 	else{
 		cout<<""<<endl;
-		cout<<"-La lista de compras esta vacia"<<endl;
+		cout<<"-La lista de cajas esta vacia"<<endl;
+	}
+}
+
+void pasarACaja ()
+{
+	Caja caja;
+	bool disponible=false;
+	if (listaCajasInicio!=NULL)
+	{
+		ListaCajas *aux=listaCajasInicio;
+		while(aux!=NULL)
+		{ 
+			caja=aux->getCaja();
+			if (caja.getEstadoLibre()==true)
+			{
+				ColaPagos cola=sacarColaPagos();
+				Cliente cliente=cola.getClientePagando();
+				Carreta carreta=cola.getCarretaCliente();
+				if (cliente.getCodigoCliente()!=NULL)
+				{
+					caja.setEstadoLibre(false);
+					caja.setCodigoCliente(cliente.getCodigoCliente());
+					caja.setCodigoCarreta(carreta.getNumeroCarreta());
+					aux->setCaja(caja);
+					cout<<""<<endl;
+					cout<<"-El cliente "<<cliente.getCodigoCliente()<<" esta pagando en la caja numero "<<caja.getNumeroCaja() <<endl;
+					disponible=true;
+					break;
+				}
+				else{
+					cout<<""<<endl;
+					cout<<"-No hay nadie en la cola de pagos"<<endl;
+					disponible=true;
+					break;
+				}
+			}
+			else
+				cout<<endl;
+			aux=aux->getCajaSiguiente();
+		}
+		if (disponible==false)
+		{
+			cout<<""<<endl;
+			cout<<"-No existen cajas disponibles en este momento"<<endl;
+		}
+	}
+	else{
+		cout<<""<<endl;
+		cout<<"-No existen cajas"<<endl;
+	}
+}
+void salirDeCaja ()
+{
+	Caja caja;
+	if (listaCajasInicio!=NULL)
+	{
+		ListaCajas *aux=listaCajasInicio;
+		while(aux!=NULL)
+		{ 
+			caja=aux->getCaja();
+			if (caja.getEstadoLibre()==false)
+			{
+				Cliente cliente(caja.getCodigoCliente());
+				Carreta carreta=(caja.getCodigoCarreta());
+				caja.setTiempoRestante(caja.getTiempoRestante()-1);
+				if (caja.getTiempoRestante()==0)
+				{
+					caja.setTiempoRestante(caja.getTiempoServicio()+1);
+					caja.setCodigoCarreta(NULL);
+					caja.setCodigoCliente(NULL);
+					caja.setEstadoLibre(true);
+					cout<<""<<endl;
+					cout<<"-El cliente "<<cliente.getCodigoCliente()<<" termino de comprar y devolvera la carreta con codigo "
+						<<carreta.getNumeroCarreta()<<endl;
+					Carreta nuevaCarreta(carreta.getNumeroCarreta());
+					int numeroRandom=rand()%2;
+					if (numeroRandom==0)
+						agregarCarreta(nuevaCarreta);
+					else
+						agregarCarreta2(nuevaCarreta);
+				}
+				aux->setCaja(caja);
+			}
+			aux=aux->getCajaSiguiente();
+		}
 	}
 }
 
