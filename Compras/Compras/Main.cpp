@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #include <conio.h>
 #include <time.h>
+#include <string> 
+#include <fstream>
 #include "Caja.h"
 #include "Carreta.h"
 #include "PilaCarreta.h"
@@ -17,20 +19,22 @@ using namespace std;
 void agregarCarreta(Carreta); //Prototipo de pila de carretas 1
 void agregarCarreta2(Carreta); //Prototipo de pila de carretas 2
 Carreta sacarCarreta(); //Prototipo de sacar carreta
-void mostrarCarreta(); //Prototipo de ver pila
+string mostrarCarreta(); //Prototipo de ver pila
+string mostrarCarreta2(); //Prototipo de ver pila
 void agregarColaCarreta(Cliente cliente); //Prototipo de agregar a cola carreta
 Cliente sacarColaCarreta(); //Protitipo para sacar de cola carreta
-void mostrarColaCarreta(); //Protitipo para mostrar de cola carreta
+string mostrarColaCarreta(); //Protitipo para mostrar de cola carreta
 void agregarColaPagos(Cliente cliente,Carreta carreta); //Prototipo de agregar a cola pagos
 ColaPagos sacarColaPagos(); //Protitipo para sacar de cola pagos
-void mostrarColaPagos(); //Protitipo para mostrar de cola pagos
+string mostrarColaPagos(); //Protitipo para mostrar de cola pagos
 Cliente sacarListaCompras(int numeroRandom); //Prototipo para sacar de lista de compras
 void agregarListaCompras (Cliente cliente,Carreta carreta); //Protitipo para agregar a lista de compras
-void mostrarListaCompras(); //Prototipo para mopstrar la lista de compras
+string mostrarListaCompras(); //Prototipo para mopstrar la lista de compras
 void agregarListaCajas (Caja caja); //Protitipo para agregar a lista de cajas
-void mostrarListaCajas(); //Prototipo para mopstrar la lista de cajas
+string mostrarListaCajas(); //Prototipo para mopstrar la lista de cajas
 void pasarACaja ();//Prototipo para pasar a caja
 void salirDeCaja ();//Prototipo para sacar de caja
+void generarGrafica ();
 
 PilaCarreta *pilaCarretas=NULL,*pilaCarretas2=NULL;
 ColaCarreta *colaCarretaFrente=NULL,*colaCarretaFin=NULL;
@@ -48,7 +52,6 @@ int main()
 	cout<<""<<endl;
 	cout<<"--Ingrese los datos para la simulacion--"<<endl;
 	cout<<""<<endl;
-
 	//Numero de cajas del sistema
 	cout<<"Ingrese el numero de cajas que tendra el supermercado"<<endl;
 	cin>>cantidadCajas;
@@ -108,8 +111,12 @@ int main()
 		//Siguiente paso
 		cout<<""<<endl;
 		paso++;
-		cout<<"Ingrese 1 para el siguiente paso o 0 para terminar el proceso"<<endl;
+		cout<<"Ingrese 1 para el siguiente paso, 2 para mostrar el grafico o 0 para terminar el proceso"<<endl;
 		cin>>opcion;
+		if (opcion==2)
+		{
+			generarGrafica();
+		}
 	}
 	cout<<""<<endl;
 	cout<<"---Simulacion terminada---"<<endl;
@@ -175,25 +182,56 @@ Carreta sacarCarreta()
 	}
 }
 
-void mostrarCarreta()
+string mostrarCarreta()
 {
 	Carreta carreta(0);
+	string graficaPilaCarretas="",auxiliarGrafica="Pila1";
 	if (pilaCarretas!=NULL)
 	{
 		PilaCarreta *aux=pilaCarretas;
 		while(aux->getCarretaSiguiente() !=NULL)
 		{
 			carreta=aux->getCarretaIngresada();
-			cout<<carreta.getNumeroCarreta()<<",";
+			//cout<<carreta.getNumeroCarreta()<<",";
+			graficaPilaCarretas+=auxiliarGrafica+"->"+"carreta"+std::to_string(carreta.getNumeroCarreta())+";\n";
+			auxiliarGrafica="carreta"+std::to_string(carreta.getNumeroCarreta());
 			aux=aux->getCarretaSiguiente();
 		}
 		carreta=aux->getCarretaIngresada();
-		cout<<carreta.getNumeroCarreta()<<"."<<endl;
+		graficaPilaCarretas+=auxiliarGrafica+"->"+"carreta"+std::to_string(carreta.getNumeroCarreta())+";\n";
+		//cout<<carreta.getNumeroCarreta()<<"."<<endl;
 	}
 	else{
-		cout<<""<<endl;
-		cout<<"-La pila de carretas esta vacia"<<endl;
+		//cout<<""<<endl;
+		//cout<<"-La pila de carretas esta vacia"<<endl;
 	}
+	return graficaPilaCarretas;
+}
+
+string mostrarCarreta2()
+{
+	Carreta carreta(0);
+	string graficaPilaCarretas="",auxiliarGrafica="Pila2";
+	if (pilaCarretas!=NULL)
+	{
+		PilaCarreta *aux=pilaCarretas2;
+		while(aux->getCarretaSiguiente() !=NULL)
+		{
+			carreta=aux->getCarretaIngresada();
+			//cout<<carreta.getNumeroCarreta()<<",";
+			graficaPilaCarretas+=auxiliarGrafica+"->"+"carreta"+std::to_string(carreta.getNumeroCarreta())+";\n";
+			auxiliarGrafica=+"carreta"+std::to_string(carreta.getNumeroCarreta());
+			aux=aux->getCarretaSiguiente();
+		}
+		carreta=aux->getCarretaIngresada();
+		graficaPilaCarretas+=auxiliarGrafica+"->"+"carreta"+std::to_string(carreta.getNumeroCarreta())+";\n";
+		//cout<<carreta.getNumeroCarreta()<<"."<<endl;
+	}
+	else{
+		//cout<<""<<endl;
+		//cout<<"-La pila de carretas esta vacia"<<endl;
+	}
+	return graficaPilaCarretas;
 }
 
 //Metodo para la cola de carretas
@@ -236,8 +274,9 @@ Cliente sacarColaCarreta()
 	}
 }
 
-void mostrarColaCarreta()
+string mostrarColaCarreta()
 {
+	string graficaColaCarretas="",auxiliarGrafica="ColaCarreta";
 	Cliente cliente(0);
 	if (colaCarretaFrente!=NULL)
 	{
@@ -245,14 +284,17 @@ void mostrarColaCarreta()
 		while(aux!=NULL)
 		{
 			cliente=aux->getClienteEsperando();
-			cout<<cliente.getCodigoCliente() <<",";
+			graficaColaCarretas+=auxiliarGrafica+"->"+"ClienteColaCarreta"+std::to_string(cliente.getCodigoCliente())+";\n";
+			auxiliarGrafica="ClienteColaCarreta"+std::to_string(cliente.getCodigoCliente());
+			//cout<<cliente.getCodigoCliente() <<",";
 			aux=aux->getClienteSiguiente();
 		}
 	}
 	else{
-		cout<<""<<endl;
-		cout<<"-La fila de clientes esta vacia"<<endl;
+		//cout<<""<<endl;
+		//cout<<"-La fila de clientes esta vacia"<<endl;
 	}
+	return graficaColaCarretas;
 }
 
 //Metodos para la lista de compras
@@ -332,25 +374,29 @@ Cliente sacarListaCompras(int numeroRandom)
 	}
 }
 
-void mostrarListaCompras()
+string mostrarListaCompras()
 {
 	Cliente cliente(0);
+	string graficaListaCompras="",auxiliarGrafica="ListaCompras";
 	if (listaComprasInicio!=NULL)
 	{
 		ListaCompras *aux=listaComprasInicio;
 		while(aux!=NULL)
 		{
 			cliente=aux->getClienteComprando();
-			cout<<cliente.getCodigoCliente() <<",";
+			graficaListaCompras+=auxiliarGrafica+"->"+"ClienteListaCompras"+std::to_string(cliente.getCodigoCliente())+";\n";
+			auxiliarGrafica="ClienteListaCompras"+std::to_string(cliente.getCodigoCliente());
+			//cout<<cliente.getCodigoCliente() <<",";
 			aux=aux->getCompradorSiguiente();
 			if(aux==listaComprasInicio)
 				break;
 		}
 	}
 	else{
-		cout<<""<<endl;
-		cout<<"-La lista de compras esta vacia"<<endl;
+		//cout<<""<<endl;
+		//cout<<"-La lista de compras esta vacia"<<endl;
 	}
+	return graficaListaCompras;
 }
 
 //Metodo para la cola de pagos
@@ -395,8 +441,9 @@ ColaPagos sacarColaPagos()
 	}
 }
 
-void mostrarColaPagos()
+string mostrarColaPagos()
 {
+	string graficaColaPagos="",auxiliarGrafica="ColaPagos";
 	Cliente cliente(0);
 	if (colaPagosFrente!=NULL)
 	{
@@ -404,14 +451,17 @@ void mostrarColaPagos()
 		while(aux!=NULL)
 		{
 			cliente=aux->getClientePagando();
-			cout<<cliente.getCodigoCliente() <<",";
+			graficaColaPagos+=auxiliarGrafica+"->"+"ClienteColaPagos"+std::to_string(cliente.getCodigoCliente())+";\n";
+			auxiliarGrafica="ClienteColaPagos"+std::to_string(cliente.getCodigoCliente());
+			//cout<<cliente.getCodigoCliente() <<",";
 			aux=aux->getClienteSiguiente();
 		}
 	}
 	else{
-		cout<<""<<endl;
-		cout<<"-La fila de pagos esta vacia"<<endl;
+		//cout<<""<<endl;
+		//cout<<"-La fila de clientes esta vacia"<<endl;
 	}
+	return graficaColaPagos;
 }
 
 void agregarListaCajas (Caja caja)
@@ -430,31 +480,30 @@ void agregarListaCajas (Caja caja)
 	cout<<"-Se agrego una caja con numero "<<caja.getNumeroCaja()<<endl;
 }
 
-void mostrarListaCajas()
+string mostrarListaCajas()
 {
 	Caja caja;
+	string graficaListaCajas="",auxiliarGrafica="ListaCajas";
 	if (listaCajasInicio!=NULL)
 	{
 		ListaCajas *aux=listaCajasInicio;
 		while(aux!=NULL)
 		{
 			caja=aux->getCaja();
-			cout<<caja.getNumeroCaja() <<" con anterior-> ";
-			if (aux!=listaCajasInicio)
-			{
-				ListaCajas *aux2=aux->getCajaAnterior();
-				caja=aux2->getCaja();
-				cout<<caja.getNumeroCaja()<<endl;
-			}
-			else
-				cout<<endl;
+			graficaListaCajas.append("\""+auxiliarGrafica+"->Caja" + std::to_string(caja.getNumeroCaja()) 
+				+"\nLibre?: "+std::to_string(caja.getEstadoLibre())+"\nCliente: "+std::to_string(caja.getCodigoCliente())
+				+"\nCarreta: "+std::to_string(caja.getCodigoCarreta())+ "\"");
+			//cout<<cliente.getCodigoCliente() <<",";
 			aux=aux->getCajaSiguiente();
+			if(aux==listaCajasInicio)
+				break;
 		}
 	}
 	else{
-		cout<<""<<endl;
-		cout<<"-La lista de cajas esta vacia"<<endl;
+		//cout<<""<<endl;
+		//cout<<"-La lista de compras esta vacia"<<endl;
 	}
+	return graficaListaCajas;
 }
 
 void pasarACaja ()
@@ -540,6 +589,78 @@ void salirDeCaja ()
 			aux=aux->getCajaSiguiente();
 		}
 	}
+}
+
+
+void generarGrafica () 
+{
+	cout<<""<<endl;
+	cout<<"---Se genero el grafico---"<<endl;
+	cout<<""<<endl;
+	system("pause");
+
+	string pila1=mostrarCarreta();
+	string pila2=mostrarCarreta2();
+	string colaCarreta=mostrarColaCarreta();
+	string listaCompras=mostrarListaCompras();
+	string colaPagos=mostrarColaPagos();
+	string listaCajas=mostrarListaCajas();
+	ofstream file("archivo.dot");
+	file << "digraph G {\n";
+
+	file << "subgraph cluster_0 {\n";
+	file << "style=filled;\n";
+	file << "color=lightgrey;\n";
+	file << "node [style=filled,color=white];\n";
+	file << pila1;
+	file << "label = \" Pila 1 \";\n";
+	file << "}\n";
+
+	file << "subgraph cluster_1 {\n";
+	file << "style=filled;\n";
+	file << "color=lightgrey;\n";
+	file << "node [style=filled,color=white];\n";
+	file << pila2;
+	file << "label = \" Pila 2 \";\n";
+	file << "}\n";
+
+	file << "subgraph cluster_2 {\n";
+	file << "style=filled;\n";
+	file << "color=lightgrey;\n";
+	file << "node [style=filled,color=white];\n";
+	file << colaCarreta;
+	file << "label = \" Cola de carreta \";\n";
+	file << "}\n";
+
+	file << "subgraph cluster_3 {\n";
+	file << "style=filled;\n";
+	file << "color=lightgrey;\n";
+	file << "node [style=filled,color=white];\n";
+	file << listaCompras;
+	file << "label = \" Lista de compras \";\n";
+	file << "}\n";
+
+	file << "subgraph cluster_4 {\n";
+	file << "style=filled;\n";
+	file << "color=lightgrey;\n";
+	file << "node [style=filled,color=white];\n";
+	file << colaPagos;
+	file << "label = \" Cola de pagos \";\n";
+	file << "}\n";
+
+	file << "subgraph cluster_5 {\n";
+	file << "style=filled;\n";
+	file << "color=lightgrey;\n";
+	file << "node [style=filled,color=white];\n";
+	file << listaCajas;
+	file << "label = \" Lista de cajas \";\n";
+	file << "}\n";
+
+	file << "}\n";
+	file.close();
+	system("dot -Tpng archivo.dot -o imagen.png");
+	ifstream image("imagen.png");
+	_getch();
 }
 
 

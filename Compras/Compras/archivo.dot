@@ -1,0 +1,67 @@
+digraph G {
+subgraph cluster_0 {
+style=filled;
+color=lightgrey;
+node [style=filled,color=white];
+Pila1->carreta7;
+carreta7->carreta5;
+carreta5->carreta3;
+carreta3->carreta1;
+label = " Pila 1 ";
+}
+subgraph cluster_1 {
+style=filled;
+color=lightgrey;
+node [style=filled,color=white];
+Pila2->carreta10;
+carreta10->carreta8;
+carreta8->carreta6;
+carreta6->carreta4;
+carreta4->carreta2;
+label = " Pila 2 ";
+}
+subgraph cluster_2 {
+style=filled;
+color=lightgrey;
+node [style=filled,color=white];
+ColaCarreta->ClienteColaCarreta2;
+ClienteColaCarreta2->ClienteColaCarreta3;
+ClienteColaCarreta3->ClienteColaCarreta4;
+ClienteColaCarreta4->ClienteColaCarreta5;
+label = " Cola de carreta ";
+}
+subgraph cluster_3 {
+style=filled;
+color=lightgrey;
+node [style=filled,color=white];
+ListaCompras->ClienteListaCompras1;
+label = " Lista de compras ";
+}
+subgraph cluster_4 {
+style=filled;
+color=lightgrey;
+node [style=filled,color=white];
+label = " Cola de pagos ";
+}
+subgraph cluster_5 {
+style=filled;
+color=lightgrey;
+node [style=filled,color=white];
+"ListaCajas->Caja1
+Libre?: 1
+Cliente: 0
+Carreta: 0""ListaCajas->Caja2
+Libre?: 1
+Cliente: 0
+Carreta: 0""ListaCajas->Caja3
+Libre?: 1
+Cliente: 0
+Carreta: 0""ListaCajas->Caja4
+Libre?: 1
+Cliente: 0
+Carreta: 0""ListaCajas->Caja5
+Libre?: 1
+Cliente: 0
+Carreta: 0"label = " Lista de cajas ";
+}
+}

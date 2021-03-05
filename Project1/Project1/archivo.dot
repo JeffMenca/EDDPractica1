@@ -1,0 +1,4 @@
+digraph G {
+padre -> hijo;
+padre -> hija;
+}
